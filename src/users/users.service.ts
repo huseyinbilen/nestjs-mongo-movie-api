@@ -42,12 +42,21 @@ export class UsersService {
   }
   
   async loginUser(userName: string, userPassword: string, request: any) {
-    const user = await this.userModel.findOne({ name: userName, password: userPassword }).exec();
-    // request.sessionID = user.id;
-    request.session.userID = user.id;
-    console.log(request.session.userID);
-    // console.log(request.sessionID);
-    return user;
+    try {
+      if(request.session.userID) {
+        return 'User Already Login.';
+      }
+      else {
+        const user = await this.userModel.findOne({ name: userName, password: userPassword }).exec();
+        // request.sessionID = user.id;
+        request.session.userID = user.id;
+        console.log(request.session.userID);
+        return user;
+      }
+
+    } catch (error) {
+      return error;
+    }
   }
 
   async logoutUser(request: any) {
