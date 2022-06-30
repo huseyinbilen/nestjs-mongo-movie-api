@@ -21,6 +21,8 @@ export class MoviesService {
   }
 
   async getMovies() {
+    // https://api.themoviedb.org/3/movie/upcoming?api_key=6e1f740c910c580bda980e764c0033eb&language=en-US&page=1
+    // `https://api.themoviedb.org/3/search/movie?api_key=6e1f740c910c580bda980e764c0033eb&language=en-US&query=${query}&page=1`
     const movies = await this.movieModel.find().exec();
     return movies.map(movie => ({
       id: movie.id,

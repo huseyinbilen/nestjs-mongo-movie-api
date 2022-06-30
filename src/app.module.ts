@@ -6,9 +6,11 @@ import { AppService } from './app.service';
 import { MoviesModule } from './movies/movies.module';
 import { UsersModule } from './users/users.module';
 import { AuthMiddleware } from '././auth-middleware';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
   imports: [
+    HttpModule,
     MoviesModule,
     UsersModule,
     MongooseModule.forRoot(
