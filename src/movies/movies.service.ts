@@ -1,35 +1,59 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { HttpService } from '@nestjs/axios';
 import { Model } from 'mongoose';
+import { map } from 'rxjs';
 
 import { Movie } from './movies.model';
 
 @Injectable()
 export class MoviesService {
   constructor(
-    @InjectModel('Movie') private readonly movieModel: Model<Movie>
-  ) {}
+    private readonly httpService: HttpService,
+    @InjectModel('Movie') private readonly movieModel: Model<Movie>,
+    ) {}
 
-  async insertMovie(name: string, desc: string, score: number) {
+  async insertMovie(name: string, desc: string, score: number, user: string) {
     const newMovie = new this.movieModel({
       name,
       description: desc,
       score,
+      user
     });
     const result = await newMovie.save();
     return result.id as string;
   }
 
+  async addMovie (movieId: string, req: any) {
+    let result: any;
+    result = this.httpService.get(`https://api.themoviedb.org/3/movie/${movieId}?api_key=6e1f740c910c580bda980e764c0033eb&language=en-US`)
+    .pipe();
+    result.subscribe(
+      (value) => {
+        let movieName = value.data.title;
+        let movieDescription = value.data.overview;
+        let movieScore = value.data.vote_average;
+        let user = req.session.userID;
+        this.insertMovie(movieName, movieDescription, movieScore, user);
+        // console.log(movieName, movieDescription, movieScore);
+        value.data.title;
+      }
+    );
+    return result.subscribe(
+      (value) => {
+        return value.data.title;
+      }
+    );
+  }
+
   async getMovies() {
-    // https://api.themoviedb.org/3/movie/upcoming?api_key=6e1f740c910c580bda980e764c0033eb&language=en-US&page=1
-    // `https://api.themoviedb.org/3/search/movie?api_key=6e1f740c910c580bda980e764c0033eb&language=en-US&query=${query}&page=1`
     const movies = await this.movieModel.find().exec();
     return movies.map(movie => ({
       id: movie.id,
       name: movie.name,
       description: movie.description,
       score: movie.score
-    }));
+    }));  
   }
 
   async getSingleMovie(movieId: string) {

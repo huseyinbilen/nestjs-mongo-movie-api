@@ -4,6 +4,7 @@ export const MovieSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
+    unique: true
   },
   description: {
     type: String,
@@ -13,6 +14,10 @@ export const MovieSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
+  user: {
+    type: mongoose.Types.ObjectId,
+    required: true
+  }
 });
 
 

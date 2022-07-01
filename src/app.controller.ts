@@ -10,7 +10,7 @@ export class AppController {
     return this.appService.getUpcoming();
   }
 
-  @Get(':id')
+  @Get('/search/:id')
   getSearchedMovie(@Param('id') movieTitle: string): string {
     return this.appService.getSearchedMovie(movieTitle);
   }

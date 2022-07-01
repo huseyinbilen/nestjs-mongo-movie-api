@@ -1,20 +1,18 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Req } from '@nestjs/common';
 import { MoviesService } from './movies.service';
 
 @Controller('movies')
 export class MoviesController {
   constructor(private readonly moviesService: MoviesService) { }
 
-  @Post()
+  @Post(':id')
   async addMovie(
-    @Body('name') movieName: string,
-    @Body('description') movieDesc: string,
-    @Body('score') movieScore: number,    
+    @Param('id') movieId: string, 
+    @Req() req: any   
   ) {
-    const generatedId = await this.moviesService.insertMovie(
-      movieName,
-      movieDesc,
-      movieScore
+    const generatedId = await this.moviesService.addMovie(
+      movieId,
+      req
     );
     return {id: generatedId};
   }
