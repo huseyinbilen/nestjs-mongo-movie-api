@@ -18,8 +18,8 @@ export class MoviesController {
   }
 
   @Get()
-  async getAllMovies() {
-    const movies = this.moviesService.getMovies();
+  async getAllMovies(@Req() req: any) {
+    const movies = this.moviesService.getMovies(req);
     return movies;
   }
 

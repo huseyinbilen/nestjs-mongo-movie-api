@@ -46,8 +46,8 @@ export class MoviesService {
     );
   }
 
-  async getMovies() {
-    const movies = await this.movieModel.find().exec();
+  async getMovies(req: any) {
+    const movies = await this.movieModel.find({user: req.session.userID}).exec();
     return movies.map(movie => ({
       id: movie.id,
       name: movie.name,
