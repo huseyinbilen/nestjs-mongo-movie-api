@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import * as session from 'express-session';
+import MongoStore from 'connect-mongo';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
@@ -20,7 +21,6 @@ async function bootstrap() {
     .setTitle('Movie API')
     .setDescription('The movie API description')
     .setVersion('1.0')
-    .addTag('Movie')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);

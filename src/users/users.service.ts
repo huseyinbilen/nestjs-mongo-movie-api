@@ -24,16 +24,6 @@ export class UsersService {
     }
   }
 
-  async getSingleUser(userId: string) {
-    const user = await this.userModel.findById(userId);
-    return {
-      id: user.id,
-      username: user.username,
-      email: user.email,
-      password: user.password
-    };
-  }
-
   async deleteUser(userId: string) {
     const results = await this.userModel.deleteOne({_id: userId}).exec();
     if(results == null) {

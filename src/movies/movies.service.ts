@@ -66,20 +66,6 @@ export class MoviesService {
     };
   }
 
-  async updateMovie(movieId: string, name: string, desc: string, score: number) {
-    const updatedMovie = await this.findMovie(movieId);
-    if(name) {
-      updatedMovie.name = name;
-    }
-    if(desc) {
-      updatedMovie.description = desc;
-    }
-    if(score) {
-      updatedMovie.score = score;
-    }
-    updatedMovie.save();
-  }
-
   async deleteMovie(movieId: string) {
     const results = await this.movieModel.deleteOne({_id: movieId}).exec();
     if(results == null) {

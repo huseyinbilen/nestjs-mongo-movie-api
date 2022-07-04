@@ -1,7 +1,9 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Req } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import mongoose from "mongoose";
 import { UsersService } from './users.service';
 
+@ApiTags('Users')
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
@@ -18,11 +20,6 @@ export class UsersController {
       userPassword
     );
     return {id: generatedId};
-  }
-
-  @Get(':id')
-  async getUser(@Param('id') userId: string) {
-    return this.usersService.getSingleUser(userId);
   }
 
   @Delete(':id')

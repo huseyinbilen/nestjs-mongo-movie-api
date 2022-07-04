@@ -1,6 +1,8 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Req } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { MoviesService } from './movies.service';
 
+@ApiTags('Movies')
 @Controller('movies')
 export class MoviesController {
   constructor(private readonly moviesService: MoviesService) { }
@@ -26,17 +28,6 @@ export class MoviesController {
   @Get(':id')
   async getMovie(@Param('id') movieId: string) {
     return this.moviesService.getSingleMovie(movieId);
-  }
-
-  @Patch(':id')
-  async updateMovie(
-    @Param('id') movieId: string, 
-    @Param('name') movieName: string,
-    @Param('description') movieDesc: string,
-    @Param('score') movieScore: number
-    ) {
-    await this.moviesService.updateMovie(movieId, movieName, movieDesc, movieScore);
-    return null;
   }
 
   @Delete(':id')
