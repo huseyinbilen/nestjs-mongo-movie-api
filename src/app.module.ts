@@ -14,7 +14,7 @@ import { HttpModule } from '@nestjs/axios';
     MoviesModule,
     UsersModule,
     MongooseModule.forRoot(
-      'mongodb://localhost:27017/nestjs-movie',
+      'mongodb://db:27017/nestjs-movie',
     ),
   ],
   controllers: [AppController],
