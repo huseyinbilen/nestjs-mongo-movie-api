@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException, Req, Request } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import * as bcrypt from 'bcrypt';
 import { Model } from 'mongoose';
 
 import { User } from './users.model';
@@ -11,11 +12,14 @@ export class UsersService {
   ) {}
 
   async createUser(username: string, email: string, password: string) {
+    const saltOrRounds = 10;
+    const hash = await bcrypt.hash(password, saltOrRounds);
+    console.log(hash);
     try {
       const newUser = new this.userModel({
         username,
         email,
-        password,
+        password: hash,
       });
       const result = await newUser.save();
       return result.id as string;
@@ -37,13 +41,16 @@ export class UsersService {
         return 'User Already Login.';
       }
       else {
-        const user = await this.userModel.findOne({ name: userName, password: userPassword }).exec();
-        // request.sessionID = user.id;
-        request.session.userID = user.id;
-        console.log(request.session.userID);
-        return user;
+        const user = await this.userModel.findOne({ name: userName }).exec();
+        const isMatch = await bcrypt.compare(userPassword, user.password);
+        if(isMatch) {
+          request.session.userID = user.id;
+          console.log(request.session.userID);
+        }
+        else {
+          return 'LOGIN FAILED'
+        }
       }
-
     } catch (error) {
       return error;
     }
